@@ -9,6 +9,8 @@ from certbot import errors
 from certbot import interfaces
 from certbot.plugins import dns_common
 
+from .exceptions import JSONDecodeError
+
 logger = logging.getLogger(__name__)
 
 DEFAULT_AUTH_ENDPOINT = "https://cloud.api.selcloud.ru"
@@ -46,7 +48,7 @@ class Authenticator(dns_common.DNSAuthenticator):
     def _setup_credentials(self):
         self.credentials = self._configure_credentials(
             "credentials",
-            "Selectel projects credentials INI file",
+            "Selectel APIv2 credentials INI file",
             {
                 "account_id": "an ID of Selectel account.",
                 "username": "the name of service account.",
@@ -107,13 +109,16 @@ class _SelectelClient(object):
         url = f"{endpoint or self.api_endpoint}{uri}"
         resp = self.session.request(method, url, *args, **kwargs)
         if resp.status_code >= 300:
-            message_parts = [f"Failed to add validation record: "
+            message_parts = [f"API request error: "
                              f"status code {resp.status_code}"]
-            answer = resp.json()
             try:
-                message_parts.append(answer["error"])
-            except LookupError:
-                pass
+                answer = resp.json()
+                try:
+                    message_parts.append(answer["error"])
+                except LookupError:
+                    pass
+            except JSONDecodeError:
+                message_parts.append(resp.content)
             raise errors.PluginError(", ".join(message_parts))
         return resp
 
@@ -124,7 +129,7 @@ class _SelectelClient(object):
                        json=data)
         try:
             return resp.json()
-        except requests.JSONDecodeError:
+        except JSONDecodeError:
             return resp.content
 
     def _api_iter_result(self, method, uri, data=None, params=None):

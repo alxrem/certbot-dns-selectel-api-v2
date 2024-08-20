@@ -2,11 +2,11 @@ from setuptools import setup
 from setuptools import find_packages
 from pathlib import Path
 
-version = "0.1.0"
+version = "0.2.0"
 
 install_requires = [
     "setuptools",
-    "requests",
+    "requests >= 2.22",
 ]
 
 this_directory = Path(__file__).parent
@@ -22,7 +22,7 @@ setup(
     author="Alexey Remizov",
     author_email="alexey@remizov.org",
     license="Apache License 2.0",
-    python_requires=">=3.8",
+    python_requires=">= 3.8",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Plugins",
@@ -31,10 +31,11 @@ setup(
         "Operating System :: POSIX :: Linux",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Security",
         "Topic :: System :: Installation/Setup",
