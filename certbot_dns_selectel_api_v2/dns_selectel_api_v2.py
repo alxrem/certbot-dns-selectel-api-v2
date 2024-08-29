@@ -177,7 +177,8 @@ class _SelectelClient(object):
 
     def get_zone_id_by_domain(self, domain):
         for zone in self._api_iter_result("GET", f"/domains/v2/zones"):
-            if zone["name"] == domain + ".":
+            domain_with_dot = domain + "."
+            if domain_with_dot.endswith(zone["name"]):
                 return zone["id"]
         raise errors.PluginError(f"Zone not found for domain {domain}")
 
