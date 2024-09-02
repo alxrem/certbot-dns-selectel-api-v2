@@ -20,7 +20,7 @@ DEFAULT_API_ENDPOINT = "https://api.selectel.ru"
 @zope.interface.implementer(interfaces.IAuthenticator)
 @zope.interface.provider(interfaces.IPluginFactory)
 class Authenticator(dns_common.DNSAuthenticator):
-    """DNS Authenticator for Selectel
+    """DNS Authenticator for Selectel 
 
     This Authenticator uses the Selectel API to fulfill a dns-01 challenge.
     """
