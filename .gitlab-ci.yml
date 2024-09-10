@@ -1,0 +1,15 @@
+test:
+  stage: test
+  parallel:
+    matrix:
+      - PYTHON: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
+        REQUESTS: [ "2.25", "2.26", "2.32.3" ]
+  image: python:${PYTHON}-slim
+  script:
+    - pip install requests==$REQUESTS requests-mock pytest certbot zope.interface
+    - pytest --junit-xml=junit.xml
+  artifacts:
+    reports:
+      junit: junit.xml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
